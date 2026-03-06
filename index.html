@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天生犯罪人 | Born Criminology</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide 图标库 -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.544.0/dist/umd/lucide.min.js"></script>
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',      // 深蓝色
+                        secondary: '#c9b037',    // 金色
+                        light: '#f7f7f7',        // 浅灰色
+                        dark: '#333333',         // 深灰色
+                        muted: '#666666',        // 中灰色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            }
+            .transition-all-300 {
+                transition: all 0.3s ease;
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+            .btn-primary {
+                @apply bg-primary text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-all duration-300;
+            }
+            .btn-secondary {
+                @apply border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition-all duration-300;
+            }
+            .input-field {
+                @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light text-dark">
+    <!-- 导航栏 -->
+    <header class="bg-primary text-white shadow-md">
+        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/9f8388c632d54f3d96be3dbf1b750c62~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026030616374626B3E141CC4A4EF537DC&rrcfp=f06b921b&x-expires=1775378297&x-signature=4KIxGRUnx3r3ny%2FHx%2Bvbr67krKA%3D" alt="Born Criminology Logo" class="h-10 w-10">
+                <div>
+                    <h1 class="text-xl font-bold" data-lang="logo">天生犯罪人</h1>
+                    <p class="text-xs text-gray-300" data-lang="logo-english">Born Criminology</p>
+                </div>
+            </div>
+
+            <!-- 桌面导航链接 -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-link active" data-lang="nav-home">首页</a>
+                <a href="#" class="nav-link" data-lang="nav-browse">浏览论文</a>
+                <a href="#" class="nav-link" data-lang="nav-upload">上传论文</a>
+                <a href="#" class="nav-link" data-lang="nav-about">关于我们</a>
+            </div>
+
+            <!-- 右侧功能区 -->
+            <div class="flex items-center space-x-4">
+                <!-- 语言切换 -->
+                <div class="flex items-center space-x-1 border border-gray-600 rounded-md p-1">
+                    <button class="lang-btn px-2 py-1 rounded" data-lang="zh-CN" data-active="true">中</button>
+                    <button class="lang-btn px-2 py-1 rounded" data-lang="en-US">EN</button>
+                </div>
+
+                <!-- 搜索按钮 -->
+                <button class="p-2 rounded-full hover:bg-blue-800 transition-all" id="search-btn">
+                    <i data-lucide="search"></i>
+                </button>
+
+                <!-- 用户菜单 -->
+                <div class="relative" id="user-menu-container">
+                    <button class="flex items-center space-x-1 p-2 rounded-full hover:bg-blue-800 transition-all" id="user-menu-btn">
+                        <i data-lucide="user-circle-2" class="w-6 h-6"></i>
+                        <span class="hidden md:inline" data-lang="nav-account">账号</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <!-- 用户下拉菜单 -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden" id="user-menu">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang="menu-profile">个人资料</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang="menu-my-papers">我的论文</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" data-lang="menu-settings">设置</a>
+                        <hr class="my-1">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" id="logout-btn" data-lang="menu-logout">退出登录</a>
+                    </div>
+                </div>
+
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden p-2 rounded-full hover:bg-blue-800 transition-all" id="mobile-menu-btn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- 移动端导航菜单 -->
+        <div class="md:hidden hidden bg-blue-900 py-2 px-4" id="mobile-menu">
+            <a href="#" class="block py-2 mobile-nav-link active" data-lang="nav-home">首页</a>
+            <a href="#" class="block py-2 mobile-nav-link" data-lang="nav-browse">浏览论文</a>
+            <a href="#" class="block py-2 mobile-nav-link" data-lang="nav-upload">上传论文</a>
+            <a href="#" class="block py-2 mobile-nav-link" data-lang="nav-about">关于我们</a>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="bg-blue-900 py-3 px-4 hidden" id="search-bar">
+            <div class="container mx-auto relative">
+                <input type="text" placeholder="搜索论文..." class="w-full px-4 py-2 rounded-md focus:outline-none" data-lang-placeholder="search-placeholder">
+                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                    <i data-lucide="search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section class="bg-primary text-white py-16 md:py-24">
+            <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 animate-fade-in">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4" data-lang="hero-title">打破学术垄断，分享研究成果</h2>
+                    <p class="text-lg mb-6 text-gray-300" data-lang="hero-subtitle">即使是"垃圾"，亦可以长长久久。我们提供开放平台，让您的学术成果获得展示机会。</p>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="btn-primary" id="get-started-btn" data-lang="hero-get-started">立即开始</button>
+                        <button class="btn-secondary" id="learn-more-btn" data-lang="hero-learn-more">了解更多</button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center animate-slide-up">
+                    <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/9f8388c632d54f3d96be3dbf1b750c62~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026030616374626B3E141CC4A4EF537DC&rrcfp=f06b921b&x-expires=1775378297&x-signature=4KIxGRUnx3r3ny%2FHx%2Bvbr67krKA%3D" alt="Born Criminology" class="w-64 h-64 object-contain">
+                </div>
+            </div>
+        </section>
+
+        <!-- 统计数据 -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="p-4 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-primary mb-2" id="stats-papers">0</div>
+                        <p class="text-muted" data-lang="stats-papers">已上传论文</p>
+                    </div>
+                    <div class="p-4 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-primary mb-2" id="stats-authors">0</div>
+                        <p class="text-muted" data-lang="stats-authors">注册作者</p>
+                    </div>
+                    <div class="p-4 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-primary mb-2" id="stats-downloads">0</div>
+                        <p class="text-muted" data-lang="stats-downloads">论文下载量</p>
+                    </div>
+                    <div class="p-4 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-primary mb-2" id="stats-citations">0</div>
+                        <p class="text-muted" data-lang="stats-citations">论文引用数</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 最新论文 -->
+        <section class="py-12 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold" data-lang="latest-papers">最新上传论文</h2>
+                    <a href="#" class="text-primary hover:underline flex items-center" data-lang="view-all">
+                        <span>查看全部</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="papers-container">
+                    <!-- 论文卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 学科分类 -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-2xl font-bold mb-8" data-lang="categories">学科分类</h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary mr-3">
+                                <i data-lucide="brain" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-criminology">犯罪学理论</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3">
+                                <i data-lucide="gavel" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-law">刑法学</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-sociology">犯罪社会学</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-3">
+                                <i data-lucide="dna" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-biology">犯罪生物学</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3">
+                                <i data-lucide="building-2" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-criminal-justice">刑事司法</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-3">
+                                <i data-lucide="heart" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-psychology">犯罪心理学</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-international">国际犯罪学</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="category-card p-4 rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 mr-3">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </div>
+                            <span data-lang="category-more">更多分类</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我们 -->
+        <section class="py-12 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                        <h2 class="text-2xl font-bold mb-4" data-lang="about-title">关于天生犯罪人</h2>
+                        <p class="mb-4" data-lang="about-text-1">
+                            "天生犯罪人"（Born Criminology）是一个开放的学术论文分享平台，旨在打破传统期刊编辑对论文审核的垄断，为学术成果提供一个自由展示的空间。
+                        </p>
+                        <p class="mb-4" data-lang="about-text-2">
+                            我们相信，每一篇研究论文都有其价值，即使它不符合某些期刊的"标准"。在这里，您可以自由上传和分享您的研究成果，与全球学者进行交流和讨论。
+                        </p>
+                        <p data-lang="about-text-3">
+                            我们的理念是："即使是垃圾，亦可以长长久久"。每一个研究都可能为学术界带来新的思考和启发。
+                        </p>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-4" data-lang="why-choose-us">为什么选择我们？</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 mr-2"></i>
+                                    <span data-lang="why-1">开放获取：所有论文免费阅读和下载</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 mr-2"></i>
+                                    <span data-lang="why-2">无需审核：直接上传，无需等待编辑审核</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 mr-2"></i>
+                                    <span data-lang="why-3">同行评议：支持读者评论和评分</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 mr-2"></i>
+                                    <span data-lang="why-4">引用统计：追踪您的论文被引用情况</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 mr-2"></i>
+                                    <span data-lang="why-5">简单注册：无需绑定手机号，自由设置账号密码</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 行动号召 -->
+        <section class="py-16 bg-primary text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-4" data-lang="cta-title">准备好分享您的研究了吗？</h2>
+                <p class="text-lg mb-8 max-w-2xl mx-auto" data-lang="cta-text">
+                    加入我们，打破学术壁垒，让您的研究成果获得更广泛的关注和影响。
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button class="bg-white text-primary px-6 py-3 rounded-md font-bold hover:bg-opacity-90 transition-all" id="upload-now-btn" data-lang="cta-upload">
+                        立即上传论文
+                    </button>
+                    <button class="border border-white text-white px-6 py-3 rounded-md font-bold hover:bg-white hover:text-primary transition-all" id="register-btn" data-lang="cta-register">
+                        注册账号
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="https://p11-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/9f8388c632d54f3d96be3dbf1b750c62~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=2026030616374626B3E141CC4A4EF537DC&rrcfp=f06b921b&x-expires=1775378297&x-signature=4KIxGRUnx3r3ny%2FHx%2Bvbr67krKA%3D" alt="Born Criminology Logo" class="h-8 w-8">
+                        <div>
+                            <h3 class="text-lg font-bold" data-lang="footer-logo">天生犯罪人</h3>
+                            <p class="text-xs text-gray-400" data-lang="footer-logo-english">Born Criminology</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-4" data-lang="footer-description">
+                        开放的学术论文分享平台，打破传统期刊编辑对论文审核的垄断。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i data-lucide="twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i data-lucide="facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i data-lucide="linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i data-lucide="github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4" data-lang="footer-quick-links">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-home">首页</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-browse">浏览论文</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-upload">上传论文</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-about">关于我们</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-contact">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4" data-lang="footer-categories">学科分类</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-criminology">犯罪学理论</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-law">刑法学</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-sociology">犯罪社会学</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-psychology">犯罪心理学</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all" data-lang="footer-more">更多分类</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4" data-lang="footer-newsletter">订阅通讯</h3>
+                    <p class="text-gray-400 mb-4" data-lang="footer-newsletter-text">
+                        订阅我们的通讯，获取最新论文和学术动态。
+                    </p>
+                    <form class="mb-4">
+                        <div class="flex">
+                            <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 rounded-l-md w-full focus:outline-none" data-lang-placeholder="footer-email-placeholder">
+                            <button type="submit" class="bg-secondary text-primary px-4 py-2 rounded-r-md hover:bg-opacity-90 transition-all">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-xs text-gray-500" data-lang="footer-privacy">
+                        我们尊重您的隐私，不会向第三方分享您的信息。
+                    </p>
+                </div>
+            </div>
+            
+            <hr class="border-gray-800 my-8">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0" data-lang="footer-copyright">
+                    &copy; 2025 天生犯罪人（Born Criminology）. 保留所有权利.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-all" data-lang="footer-terms">使用条款</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-all" data-lang="footer-privacy-policy">隐私政策</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm transition-all" data-lang="footer-cookies">Cookie 政策</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 模态框 -->
+    <!-- 登录模态框 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="login-modal">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold" data-lang="login-title">登录账号</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1" data-lang="login-username">用户名</label>
+                    <input type="text" id="username" class="input-field" required>
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1" data-lang="login-password">密码</label>
+                    <input type="password" id="password" class="input-field" required>
+                </div>
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember-me" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700" data-lang="login-remember">记住我</label>
+                    </div>
+                    <a href="#" class="text-sm text-primary hover:underline" data-lang="login-forgot">忘记密码？</a>
+                </div>
+                <button type="submit" class="w-full btn-primary" data-lang="login-submit">登录</button>
+            </form>
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600" data-lang="login-no-account">
+                    还没有账号？
+                    <a href="#" class="text-primary hover:underline" id="show-register-btn" data-lang="login-register">立即注册</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="register-modal">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold" data-lang="register-title">注册账号</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="register-form">
+                <div class="mb-4">
+                    <label for="register-username" class="block text-sm font-medium text-gray-700 mb-1" data-lang="register-username">用户名</label>
+                    <input type="text" id="register-username" class="input-field" required>
+                </div>
+                <div class="mb-4">
+                    <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1" data-lang="register-email">邮箱地址</label>
+                    <input type="email" id="register-email" class="input-field" required>
+                </div>
+                <div class="mb-4">
+                    <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1" data-lang="register-password">密码</label>
+                    <input type="password" id="register-password" class="input-field" required>
+                </div>
+                <div class="mb-6">
+                    <label for="register-confirm-password" class="block text-sm font-medium text-gray-700 mb-1" data-lang="register-confirm-password">确认密码</label>
+                    <input type="password" id="register-confirm-password" class="input-field" required>
+                </div>
+                <div class="flex items-center mb-6">
+                    <input type="checkbox" id="agree-terms" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded" required>
+                    <label for="agree-terms" class="ml-2 block text-sm text-gray-700" data-lang="register-terms">
+                        我同意 <a href="#" class="text-primary hover:underline">使用条款</a> 和 <a href="#" class="text-primary hover:underline">隐私政策</a>
+                    </label>
+                </div>
+                <button type="submit" class="w-full btn-primary" data-lang="register-submit">注册</button>
+            </form>
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600" data-lang="register-have-account">
+                    已有账号？
+                    <a href="#" class="text-primary hover:underline" id="show-login-btn" data-lang="register-login">立即登录</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 上传论文模态框 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="upload-modal">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold" data-lang="upload-title">上传论文</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="upload-form">
+                <div class="mb-4">
+                    <label for="paper-title" class="block text-sm font-medium text-gray-700 mb-1" data-lang="upload-title-label">论文标题</label>
+                    <input type="text" id="paper-title" class="input-field" required>
+                </div>
+                <div class="mb-4">
+                    <label for="paper-authors" class="block text-sm font-medium text-gray-700 mb-1" data-lang="upload-authors">作者</label>
+                    <input type="text" id="paper-authors" class="input-field" placeholder="用逗号分隔多个作者" data-lang-placeholder="upload-authors-placeholder">
+                </div>
+                <div class="mb-4">
+                    <label for="paper-category" class="block text-sm font-medium text-gray-700 mb-1" data-lang="upload-category">学科分类</label>
+                    <select id="paper-category" class="input-field">
+                        <option value="" data-lang="upload-category-select">请选择分类</option>
+                        <option value="criminology" data-lang="upload-category-criminology">犯罪学理论</option>
+                        <option value="law" data-lang="upload-category-law">刑法学</option>
+                        <option value="sociology" data-lang="upload-category-sociology">犯罪社会学</option>
+                        <option value="biology" data-lang="upload-category-biology">犯罪生物学</option>
+                        <option value="criminal-justice" data-lang="upload-category-criminal-justice">刑事司法</option>
+                        <option value="psychology" data-lang="upload-category-psychology">犯罪心理学</option>
+                        <option value="international" data-lang="upload-category-international">国际犯罪学</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="paper-keywords" class="block text-sm font-medium text-gray-700 mb-1" data-lang="upload-keywords">关键词</label>
+                    <input type="text" id="paper-keywords" class="input-field" placeholder="用逗号分隔多个关键词" data-lang-placeholder="upload-keywords-placeholder">
+                </div>
+                <div class="mb-4">
+                    <label for="paper-abstract" class="block text-sm font-medium text-gray-700 mb-1" data-lang="upload-abstract">摘要</label>
+                    <textarea id="paper-abstract" rows="4" class="input-field" required></textarea>
+                </div>
+                <div class="mb-6">
+                    <label for="paper-file" class="block text-sm font-medium text-gray-700 mb-1" data-lang="upload-file">论文文件 (PDF)</label>
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                        <div class="space-y-1 text-center">
+                            <i data-lucide="file-text" class="mx-auto h-12 w-12 text-gray-400"></i>
+                            <div class="flex text-sm text-gray-600">
+                                <label for="paper-file" class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-blue-500 focus-within:outline-none">
+                                    <span data-lang="upload-file-browse">浏览文件</span>
+                                    <input id="paper-file" name="paper-file" type="file" class="sr-only" accept=".pdf">
+                                </label>
+                                <p class="pl-1" data-lang="upload-file-or">或</p>
+                            </div>
+                            <p class="text-xs text-gray-500" data-lang="upload-file-drag">
+                                拖放文件到此处，或点击上传
+                            </p>
+                            <p class="text-xs text-gray-500" data-lang="upload-file-limit">
+                                支持 PDF 格式，最大 10MB
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="btn-secondary modal-close" data-lang="upload-cancel">取消</button>
+                    <button type="submit" class="btn-primary" data-lang="upload-submit">上传</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 论文预览模态框 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="paper-preview-modal">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold" id="preview-title">论文标题</h3>
+                <button class="modal-close text-gray-500 hover:text-gray-700">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <p class="text-gray-600" id="preview-authors">作者</p>
+            </div>
+            <div class="mb-4 flex flex-wrap gap-2">
+                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded" id="preview-category">分类</span>
+                <div id="preview-keywords">
+                    <!-- 关键词标签将动态生成 -->
+                </div>
+            </div>
+            <div class="mb-6">
+                <h4 class="font-medium mb-2" data-lang="preview-abstract">摘要</h4>
+                <p class="text-gray-700" id="preview-abstract">摘要内容</p>
+            </div>
+            <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-500 text-sm" id="preview-date">发布日期</span>
+                    <span class="text-gray-500 text-sm flex items-center">
+                        <i data-lucide="download" class="w-4 h-4 mr-1"></i>
+                        <span id="preview-downloads">0</span>
+                    </span>
+                    <span class="text-gray-500 text-sm flex items-center">
+                        <i data-lucide="message-circle" class="w-4 h-4 mr-1"></i>
+                        <span id="preview-comments">0</span>
+                    </span>
+                </div>
+                <div class="flex space-x-3">
+                    <button class="btn-secondary flex items-center" id="preview-download-btn">
+                        <i data-lucide="download" class="w-4 h-4 mr-1"></i>
+                        <span data-lang="preview-download">下载</span>
+                    </button>
+                    <button class="btn-primary flex items-center" id="preview-comment-btn">
+                        <i data-lucide="message-circle" class="w-4 h-4 mr-1"></i>
+                        <span data-lang="preview-comment">评论</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成功提示 -->
+    <div class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-3 rounded-md shadow-lg transform translate-y-full opacity-0 transition-all duration-300 z-50" id="success-toast">
+        <div class="flex items-center">
+            <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+            <span id="success-message">操作成功</span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 国际化文本对象
+        const translations = {
+            'zh-CN': {
+                // 导航栏
+                'logo': '天生犯罪人',
+                'logo-english': 'Born Criminology',
+                'nav-home': '首页',
+                'nav-browse': '浏览论文',
+                'nav-upload': '上传论文',
+                'nav-about': '关于我们',
+                'nav-account': '账号',
+                
+                // 英雄区域
+                'hero-title': '打破学术垄断，分享研究成果',
+                'hero-subtitle': '即使是"垃圾"，亦可以长长久久。我们提供开放平台，让您的学术成果获得展示机会。',
+                'hero-get-started': '立即开始',
+                'hero-learn-more': '了解更多',
+                
+                // 统计数据
+                'stats-papers': '已上传论文',
+                'stats-authors': '注册作者',
+                'stats-downloads': '论文下载量',
+                'stats-citations': '论文引用数',
+                
+                // 最新论文
+                'latest-papers': '最新上传论文',
+                'view-all': '查看全部',
+                
+                // 学科分类
+                'categories': '学科分类',
+                'category-criminology': '犯罪学理论',
+                'category-law': '刑法学',
+                'category-sociology': '犯罪社会学',
+                'category-biology': '犯罪生物学',
+                'category-criminal-justice': '刑事司法',
+                'category-psychology': '犯罪心理学',
+                'category-international': '国际犯罪学',
+                'category-more': '更多分类',
+                
+                // 关于我们
+                'about-title': '关于天生犯罪人',
+                'about-text-1': '"天生犯罪人"（Born Criminology）是一个开放的学术论文分享平台，旨在打破传统期刊编辑对论文审核的垄断，为学术成果提供一个自由展示的空间。',
+                'about-text-2': '我们相信，每一篇研究论文都有其价值，即使它不符合某些期刊的"标准"。在这里，您可以自由上传和分享您的研究成果，与全球学者进行交流和讨论。',
+                'about-text-3': '我们的理念是："即使是垃圾，亦可以长长久久"。每一个研究都可能为学术界带来新的思考和启发。',
+                'why-choose-us': '为什么选择我们？',
+                'why-1': '开放获取：所有论文免费阅读和下载',
+                'why-2': '无需审核：直接上传，无需等待编辑审核',
+                'why-3': '同行评议：支持读者评论和评分',
+                'why-4': '引用统计：追踪您的论文被引用情况',
+                'why-5': '简单注册：无需绑定手机号，自由设置账号密码',
+                
+                // 行动号召
+                'cta-title': '准备好分享您的研究了吗？',
+                'cta-text': '加入我们，打破学术壁垒，让您的研究成果获得更广泛的关注和影响。',
+                'cta-upload': '立即上传论文',
+                'cta-register': '注册账号',
+                
+                // 页脚
+                'footer-logo': '天生犯罪人',
+                'footer-logo-english': 'Born Criminology',
+                'footer-description': '开放的学术论文分享平台，打破传统期刊编辑对论文审核的垄断。',
+                'footer-quick-links': '快速链接',
+                'footer-home': '首页',
+                'footer-browse': '浏览论文',
+                'footer-upload': '上传论文',
+                'footer-about': '关于我们',
+                'footer-contact': '联系我们',
+                'footer-categories': '学科分类',
+                'footer-criminology': '犯罪学理论',
+                'footer-law': '刑法学',
+                'footer-sociology': '犯罪社会学',
+                'footer-psychology': '犯罪心理学',
+                'footer-more': '更多分类',
+                'footer-newsletter': '订阅通讯',
+                'footer-newsletter-text': '订阅我们的通讯，获取最新论文和学术动态。',
+                'footer-email-placeholder': '您的邮箱地址',
+                'footer-privacy': '我们尊重您的隐私，不会向第三方分享您的信息。',
+                'footer-copyright': '&copy; 2025 天生犯罪人（Born Criminology）. 保留所有权利.',
+                'footer-terms': '使用条款',
+                'footer-privacy-policy': '隐私政策',
+                'footer-cookies': 'Cookie 政策',
+                
+                // 登录模态框
+                'login-title': '登录账号',
+                'login-username': '用户名',
+                'login-password': '密码',
+                'login-remember': '记住我',
+                'login-forgot': '忘记密码？',
+                'login-submit': '登录',
+                'login-no-account': '还没有账号？',
+                'login-register': '立即注册',
+                
+                // 注册模态框
+                'register-title': '注册账号',
+                'register-username': '用户名',
+                'register-email': '邮箱地址',
+                'register-password': '密码',
+                'register-confirm-password': '确认密码',
+                'register-terms': '我同意 使用条款 和 隐私政策',
+                'register-submit': '注册',
+                'register-have-account': '已有账号？',
+                'register-login': '立即登录',
+                
+                // 上传论文模态框
+                'upload-title': '上传论文',
+                'upload-title-label': '论文标题',
+                'upload-authors': '作者',
+                'upload-authors-placeholder': '用逗号分隔多个作者',
+                'upload-category': '学科分类',
+                'upload-category-select': '请选择分类',
+                'upload-category-criminology': '犯罪学理论',
+                'upload-category-law': '刑法学',
+                'upload-category-sociology': '犯罪社会学',
+                'upload-category-biology': '犯罪生物学',
+                'upload-category-criminal-justice': '刑事司法',
+                'upload-category-psychology': '犯罪心理学',
+                'upload-category-international': '国际犯罪学',
+                'upload-keywords': '关键词',
+                'upload-keywords-placeholder': '用逗号分隔多个关键词',
+                'upload-abstract': '摘要',
+                'upload-file': '论文文件 (PDF)',
+                'upload-file-browse': '浏览文件',
+                'upload-file-or': '或',
+                'upload-file-drag': '拖放文件到此处，或点击上传',
+                'upload-file-limit': '支持 PDF 格式，最大 10MB',
+                'upload-cancel': '取消',
+                'upload-submit': '上传',
+                
+                // 论文预览模态框
+                'preview-abstract': '摘要',
+                'preview-download': '下载',
+                'preview-comment': '评论',
+                
+                // 搜索
+                'search-placeholder': '搜索论文...',
+                
+                // 用户菜单
+                'menu-profile': '个人资料',
+                'menu-my-papers': '我的论文',
+                'menu-settings': '设置',
+                'menu-logout': '退出登录',
+                
+                // 成功提示
+                'toast-login-success': '登录成功',
+                'toast-register-success': '注册成功',
+                'toast-upload-success': '论文上传成功',
+                'toast-logout-success': '已退出登录',
+                'toast-like-success': '点赞成功',
+                'toast-dislike-success': '已标记不喜欢',
+            },
+            'en-US': {
+                // 导航栏
+                'logo': 'Born Criminology',
+                'logo-english': '天生犯罪人',
+                'nav-home': 'Home',
+                'nav-browse': 'Browse Papers',
+                'nav-upload': 'Upload Paper',
+                'nav-about': 'About Us',
+                'nav-account': 'Account',
+                
+                // 英雄区域
+                'hero-title': 'Break Academic Monopoly, Share Research Results',
+                'hero-subtitle': 'Even "garbage" can last forever. We provide an open platform for your academic achievements to be showcased.',
+                'hero-get-started': 'Get Started',
+                'hero-learn-more': 'Learn More',
+                
+                // 统计数据
+                'stats-papers': 'Uploaded Papers',
+                'stats-authors': 'Registered Authors',
+                'stats-downloads': 'Paper Downloads',
+                'stats-citations': 'Paper Citations',
+                
+                // 最新论文
+                'latest-papers': 'Latest Uploaded Papers',
+                'view-all': 'View All',
+                
+                // 学科分类
+                'categories': 'Disciplines',
+                'category-criminology': 'Criminological Theory',
+                'category-law': 'Criminal Law',
+                'category-sociology': 'Criminal Sociology',
+                'category-biology': 'Criminal Biology',
+                'category-criminal-justice': 'Criminal Justice',
+                'category-psychology': 'Criminal Psychology',
+                'category-international': 'International Criminology',
+                'category-more': 'More Categories',
+                
+                // 关于我们
+                'about-title': 'About Born Criminology',
+                'about-text-1': '"Born Criminology" is an open academic paper sharing platform aimed at breaking the monopoly of traditional journal editors on paper review and providing a free space for academic achievements to be displayed.',
+                'about-text-2': 'We believe that every research paper has its value, even if it does not meet certain journals\' "standards". Here, you can freely upload and share your research results, and communicate and discuss with scholars worldwide.',
+                'about-text-3': 'Our philosophy is: "Even garbage can last forever". Every research may bring new thoughts and inspiration to the academic community.',
+                'why-choose-us': 'Why Choose Us?',
+                'why-1': 'Open Access: All papers are free to read and download',
+                'why-2': 'No Review: Direct upload, no need to wait for editor review',
+                'why-3': 'Peer Review: Support reader comments and ratings',
+                'why-4': 'Citation Statistics: Track your paper\'s citation status',
+                'why-5': 'Simple Registration: No need to bind phone number, freely set account and password',
+                
+                // 行动号召
+                'cta-title': 'Ready to Share Your Research?',
+                'cta-text': 'Join us, break academic barriers, and let your research achievements gain wider attention and impact.',
+                'cta-upload': 'Upload Paper Now',
+                'cta-register': 'Register Account',
+                
+                // 页脚
+                'footer-logo': 'Born Criminology',
+                'footer-logo-english': '天生犯罪人',
+                'footer-description': 'An open academic paper sharing platform, breaking the monopoly of traditional journal editors on paper review.',
+                'footer-quick-links': 'Quick Links',
+                'footer-home': 'Home',
+                'footer-browse': 'Browse Papers',
+                'footer-upload': 'Upload Paper',
+                'footer-about': 'About Us',
+                'footer-contact': 'Contact Us',
+                'footer-categories': 'Disciplines',
+                'footer-criminology': 'Criminological Theory',
+                'footer-law': 'Criminal Law',
+                'footer-sociology': 'Criminal Sociology',
+                'footer-psychology': 'Criminal Psychology',
+                'footer-more': 'More Categories',
+                'footer-newsletter': 'Subscribe to Newsletter',
+                'footer-newsletter-text': 'Subscribe to our newsletter for the latest papers and academic updates.',
+                'footer-email-placeholder': 'Your email address',
+                'footer-privacy': 'We respect your privacy and will not share your information with third parties.',
+                'footer-copyright': '&copy; 2025 Born Criminology. All rights reserved.',
+                'footer-terms': 'Terms of Use',
+                'footer-privacy-policy': 'Privacy Policy',
+                'footer-cookies': 'Cookie Policy',
+                
+                // 登录模态框
+                'login-title': 'Login Account',
+                'login-username': 'Username',
+                'login-password': 'Password',
+                'login-remember': 'Remember me',
+                'login-forgot': 'Forgot password?',
+                'login-submit': 'Login',
+                'login-no-account': 'Don\'t have an account?',
+                'login-register': 'Register Now',
+                
+                // 注册模态框
+                'register-title': 'Register Account',
+                'register-username': 'Username',
+                'register-email': 'Email Address',
+                'register-password': 'Password',
+                'register-confirm-password': 'Confirm Password',
+                'register-terms': 'I agree to the Terms of Use and Privacy Policy',
+                'register-submit': 'Register',
+                'register-have-account': 'Already have an account?',
+                'register-login': 'Login Now',
+                
+                // 上传论文模态框
+                'upload-title': 'Upload Paper',
+                'upload-title-label': 'Paper Title',
+                'upload-authors': 'Authors',
+                'upload-authors-placeholder': 'Separate multiple authors with commas',
+                'upload-category': 'Discipline',
+                'upload-category-select': 'Please select a discipline',
+                'upload-category-criminology': 'Criminological Theory',
+                'upload-category-law': 'Criminal Law',
+                'upload-category-sociology': 'Criminal Sociology',
+                'upload-category-biology': 'Criminal Biology',
+                'upload-category-criminal-justice': 'Criminal Justice',
+                'upload-category-psychology': 'Criminal Psychology',
+                'upload-category-international': 'International Criminology',
+                'upload-keywords': 'Keywords',
+                'upload-keywords-placeholder': 'Separate multiple keywords with commas',
+                'upload-abstract': 'Abstract',
+                'upload-file': 'Paper File (PDF)',
+                'upload-file-browse': 'Browse Files',
+                'upload-file-or': 'or',
+                'upload-file-drag': 'Drag and drop files here, or click to upload',
+                'upload-file-limit': 'PDF format supported, maximum 10MB',
+                'upload-cancel': 'Cancel',
+                'upload-submit': 'Upload',
+                
+                // 论文预览模态框
+                'preview-abstract': 'Abstract',
+                'preview-download': 'Download',
+                'preview-comment': 'Comment',
+                
+                // 搜索
+                'search-placeholder': 'Search papers...',
+                
+                // 用户菜单
+                'menu-profile': 'Profile',
+                'menu-my-papers': 'My Papers',
+                'menu-settings': 'Settings',
+                'menu-logout': 'Logout',
+                
+                // 成功提示
+                'toast-login-success': 'Login successful',
+                'toast-register-success': 'Registration successful',
+                'toast-upload-success': 'Paper uploaded successfully',
+                'toast-logout-success': 'Logged out successfully',
+                'toast-like-success': 'Liked successfully',
+                'toast-dislike-success': 'Marked as dislike',
+            }
+        };
+
+        // 模拟论文数据
+        const mockPapers = [
+            {
+                id: 1,
+                title: '犯罪学理论的历史演变与未来发展',
+                englishTitle: 'Historical Evolution and Future Development of Criminological Theories',
+                authors: ['张三', '李四'],
+                category: 'criminology',
+                categoryName: {
+                    'zh-CN': '犯罪学理论',
+                    'en-US': 'Criminological Theory'
+                },
+                keywords: ['犯罪学', '理论演变', '未来发展'],
+                englishKeywords: ['Criminology', 'Theoretical Evolution', 'Future Development'],
+                abstract: '本文系统梳理了犯罪学理论的历史演变过程，分析了不同时期主要理论流派的特点和贡献，并对未来犯罪学理论的发展趋势进行了展望。研究表明，犯罪学理论正朝着多学科融合、微观与宏观结合的方向发展。',
+                englishAbstract: 'This paper systematically reviews the historical evolution of criminological theories, analyzes the characteristics and contributions of major theoretical schools in different periods, and prospects the development trends of criminological theories in the future. The research shows that criminological theories are developing towards the integration of multiple disciplines and the combination of micro and macro perspectives.',
+                uploadDate: '2025-03-01',
+                downloads: 156,
+                comments: 12,
+                citations: 5,
+                likes: 28,
+                dislikes: 3
+            },
+            {
+                id: 2,
+                title: '青少年犯罪心理成因分析与干预策略',
+                englishTitle: 'Analysis of Psychological Causes of Juvenile Delinquency and Intervention Strategies',
+                authors: ['王五', '赵六', '钱七'],
+                category: 'psychology',
+                categoryName: {
+                    'zh-CN': '犯罪心理学',
+                    'en-US': 'Criminal Psychology'
+                },
+                keywords: ['青少年犯罪', '心理成因', '干预策略'],
+                englishKeywords: ['Juvenile Delinquency', 'Psychological Causes', 'Intervention Strategies'],
+                abstract: '本研究通过对100名青少年犯罪者的心理评估和深度访谈，分析了青少年犯罪的主要心理成因，包括家庭环境、社会压力、心理障碍等因素，并提出了相应的心理干预策略。研究发现，早期家庭环境对青少年犯罪行为有显著影响。',
+                englishAbstract: 'Through psychological assessment and in-depth interviews with 100 juvenile delinquents, this study analyzes the main psychological causes of juvenile delinquency, including family environment, social pressure, psychological disorders and other factors, and proposes corresponding psychological intervention strategies. The study found that early family environment has a significant impact on juvenile delinquency behavior.',
+                uploadDate: '2025-02-28',
+                downloads: 203,
+                comments: 18,
+                citations: 8,
+                likes: 35,
+                dislikes: 2
+            },
+            {
+                id: 3,
+                title: '数字化时代的网络犯罪特点与防控对策',
+                englishTitle: 'Characteristics and Prevention Strategies of Cybercrime in the Digital Age',
+                authors: ['孙八'],
+                category: 'criminal-justice',
+                categoryName: {
+                    'zh-CN': '刑事司法',
+                    'en-US': 'Criminal Justice'
+                },
+                keywords: ['网络犯罪', '数字化', '防控对策'],
+                englishKeywords: ['Cybercrime', 'Digitalization', 'Prevention Strategies'],
+                abstract: '随着数字化技术的快速发展，网络犯罪呈现出智能化、隐蔽化、跨境化等新特点，给传统刑事司法体系带来了严峻挑战。本文分析了数字化时代网络犯罪的主要特点，并从法律制度、技术手段、国际合作等方面提出了防控对策。',
+                englishAbstract: 'With the rapid development of digital technology, cybercrime presents new characteristics such as intelligence, concealment, and transnationality, posing severe challenges to the traditional criminal justice system. This paper analyzes the main characteristics of cybercrime in the digital age, and proposes prevention and control strategies from the aspects of legal system, technical means, and international cooperation.',
+                uploadDate: '2025-02-25',
+                downloads: 178,
+                comments: 15,
+                citations: 6,
+                likes: 22,
+                dislikes: 4
+            },
+            {
+                id: 4,
+                title: '犯罪生物学视角下的暴力犯罪研究',
+                englishTitle: 'Research on Violent Crime from the Perspective of Criminal Biology',
+                authors: ['周九', '吴十'],
+                category: 'biology',
+                categoryName: {
+                    'zh-CN': '犯罪生物学',
+                    'en-US': 'Criminal Biology'
+                },
+                keywords: ['犯罪生物学', '暴力犯罪', '基因因素'],
+                englishKeywords: ['Criminal Biology', 'Violent Crime', 'Genetic Factors'],
+                abstract: '本研究从犯罪生物学视角出发，探讨了基因、神经生物学、生物化学等因素与暴力犯罪行为的关联。通过对500名暴力犯罪者和500名正常对照的对比研究，发现某些基因多态性与暴力犯罪行为存在显著相关性。研究结果为暴力犯罪的预防和干预提供了生物学依据。',
+                englishAbstract: 'From the perspective of criminal biology, this study explores the association between genes, neurobiology, biochemistry and other factors with violent criminal behavior. Through a comparative study of 500 violent offenders and 500 normal controls, it was found that certain genetic polymorphisms are significantly correlated with violent criminal behavior. The research results provide a biological basis for the prevention and intervention of violent crime.',
+                uploadDate: '2025-02-20',
+                downloads: 142,
+                comments: 9,
+                citations: 4,
+                likes: 18,
+                dislikes: 1
+            },
+            {
+                id: 5,
+                title: '社会分层与犯罪率关系的实证研究',
+                englishTitle: 'An Empirical Study on the Relationship between Social Stratification and Crime Rate',
+                authors: ['郑十一', '王十二', '赵十三'],
+                category: 'sociology',
+                categoryName: {
+                    'zh-CN': '犯罪社会学',
+                    'en-US': 'Criminal Sociology'
+                },
+                keywords: ['社会分层', '犯罪率', '实证研究'],
+                englishKeywords: ['Social Stratification', 'Crime Rate', 'Empirical Research'],
+                abstract: '本文利用全国性社会调查数据，通过多元回归分析和结构方程模型，实证检验了社会分层与犯罪率之间的关系。研究发现，社会经济地位的不平等是影响犯罪率的重要因素，而社会流动机会的减少会进一步加剧犯罪问题。研究结果支持了社会紧张理论和相对剥夺理论的核心观点。',
+                englishAbstract: 'Using national social survey data, this paper empirically tests the relationship between social stratification and crime rate through multiple regression analysis and structural equation modeling. The study found that inequality in socioeconomic status is an important factor affecting crime rates, and the reduction of social mobility opportunities will further exacerbate crime problems. The research results support the core viewpoints of social strain theory and relative deprivation theory.',
+                uploadDate: '2025-02-18',
+                downloads: 167,
+                comments: 14,
+                citations: 7,
+                likes: 25,
+                dislikes: 3
+            },
+            {
+                id: 6,
+                title: '国际刑事法院管辖权问题研究',
+                englishTitle: 'Research on the Jurisdiction of the International Criminal Court',
+                authors: ['孙十四'],
+                category: 'international',
+                categoryName: {
+                    'zh-CN': '国际犯罪学',
+                    'en-US': 'International Criminology'
+                },
+                keywords: ['国际刑事法院', '管辖权', '补充性原则'],
+                englishKeywords: ['International Criminal Court', 'Jurisdiction', 'Complementarity Principle'],
+                abstract: '国际刑事法院的管辖权问题是国际刑法领域的核心议题之一。本文系统分析了国际刑事法院管辖权的法律依据、适用范围、行使条件以及与国家管辖权的关系，重点探讨了补充性原则的具体应用和实践挑战。研究表明，补充性原则在理论与实践之间存在一定差距，需要进一步完善相关机制。',
+                englishAbstract: 'The jurisdiction of the International Criminal Court is one of the core issues in the field of international criminal law. This paper systematically analyzes the legal basis, scope of application, exercise conditions of the jurisdiction of the International Criminal Court, as well as its relationship with national jurisdiction, with a focus on the specific application and practical challenges of the complementarity principle. The research shows that there is a certain gap between the complementarity principle in theory and practice, and the relevant mechanisms need to be further improved.',
+                uploadDate: '2025-02-15',
+                downloads: 135,
+                comments: 10,
+                citations: 3,
+                likes: 15,
+                dislikes: 2
+            }
+        ];
+
+        // 当前语言
+        let currentLang = 'zh-CN';
+
+        // 当前用户状态
+        let currentUser = null;
+
+        // DOM 加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化图标
+            lucide.createIcons();
+            
+            // 初始化语言
+            updateLanguage(currentLang);
+            
+            // 初始化统计数据
+            animateStats();
+            
+            // 渲染论文列表
+            renderPapers(mockPapers);
+            
+            // 绑定事件
+            bindEvents();
+        });
+
+        // 更新语言
+        function updateLanguage(lang) {
+            currentLang = lang;
+            
+            // 更新文本内容
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            // 更新占位符
+            document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-lang-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+            
+            // 更新语言按钮状态
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('bg-white', 'text-primary');
+                    btn.setAttribute('data-active', 'true');
+                } else {
+                    btn.classList.remove('bg-white', 'text-primary');
+                    btn.setAttribute('data-active', 'false');
+                }
+            });
+            
+            // 更新HTML语言属性
+            document.documentElement.lang = lang;
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // 语言切换
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    updateLanguage(lang);
+                    
+                    // 重新渲染论文列表以更新语言
+                    renderPapers(mockPapers);
+                });
+            });
+            
+            // 移动端菜单
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 搜索栏
+            const searchBtn = document.getElementById('search-btn');
+            const searchBar = document.getElementById('search-bar');
+            
+            searchBtn.addEventListener('click', function() {
+                searchBar.classList.toggle('hidden');
+                if (!searchBar.classList.contains('hidden')) {
+                    searchBar.querySelector('input').focus();
+                }
+            });
+            
+            // 用户菜单
+            const userMenuBtn = document.getElementById('user-menu-btn');
+            const userMenu = document.getElementById('user-menu');
+            
+            userMenuBtn.addEventListener('click', function() {
+                userMenu.classList.toggle('hidden');
+            });
+            
+            // 点击其他地方关闭用户菜单
+            document.addEventListener('click', function(event) {
+                if (!document.getElementById('user-menu-container').contains(event.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+            
+            // 模态框关闭按钮
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.fixed').classList.add('hidden');
+                });
+            });
+            
+            // 登录模态框
+            const loginModal = document.getElementById('login-modal');
+            const loginForm = document.getElementById('login-form');
+            
+            // 显示登录模态框
+            document.querySelectorAll('#user-menu-btn, #show-login-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    loginModal.classList.remove('hidden');
+                    registerModal.classList.add('hidden');
+                });
+            });
+            
+            // 登录表单提交
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // 模拟登录验证
+                if (username && password) {
+                    currentUser = { username };
+                    
+                    // 显示成功提示
+                    showSuccessToast('toast-login-success');
+                    
+                    // 关闭模态框
+                    loginModal.classList.add('hidden');
+                    
+                    // 更新用户菜单
+                    updateUserMenu();
+                }
+            });
+            
+            // 注册模态框
+            const registerModal = document.getElementById('register-modal');
+            const registerForm = document.getElementById('register-form');
+            
+            // 显示注册模态框
+            document.querySelectorAll('#register-btn, #show-register-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    registerModal.classList.remove('hidden');
+                    loginModal.classList.add('hidden');
+                });
+            });
+            
+            // 注册表单提交
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('register-username').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                
+                // 模拟注册验证
+                if (username && email && password && password === confirmPassword) {
+                    currentUser = { username, email };
+                    
+                    // 显示成功提示
+                    showSuccessToast('toast-register-success');
+                    
+                    // 关闭模态框
+                    registerModal.classList.add('hidden');
+                    
+                    // 更新用户菜单
+                    updateUserMenu();
+                }
+            });
+            
+            // 上传论文模态框
+            const uploadModal = document.getElementById('upload-modal');
+            const uploadForm = document.getElementById('upload-form');
+            
+            // 显示上传模态框
+            document.querySelectorAll('#upload-now-btn, #get-started-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (currentUser) {
+                        uploadModal.classList.remove('hidden');
+                    } else {
+                        loginModal.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            // 上传表单提交
+            uploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('paper-title').value;
+                const authors = document.getElementById('paper-authors').value;
+                const category = document.getElementById('paper-category').value;
+                const keywords = document.getElementById('paper-keywords').value;
+                const abstract = document.getElementById('paper-abstract').value;
+                const file = document.getElementById('paper-file').files[0];
+                
+                // 模拟上传验证
+                if (title && authors && category && keywords && abstract && file) {
+                    // 显示成功提示
+                    showSuccessToast('toast-upload-success');
+                    
+                    // 关闭模态框
+                    uploadModal.classList.add('hidden');
+                    
+                    // 重置表单
+                    uploadForm.reset();
+                    
+                    // 模拟添加新论文到列表
+                    const newPaper = {
+                        id: mockPapers.length + 1,
+                        title: title,
+                        englishTitle: title, // 简化处理，实际应用中可能需要英文标题
+                        authors: authors.split(',').map(a => a.trim()),
+                        category: category,
+                        categoryName: {
+                            'zh-CN': document.getElementById('paper-category').options[document.getElementById('paper-category').selectedIndex].text,
+                            'en-US': document.getElementById('paper-category').options[document.getElementById('paper-category').selectedIndex].text
+                        },
+                        keywords: keywords.split(',').map(k => k.trim()),
+                        englishKeywords: keywords.split(',').map(k => k.trim()), // 简化处理
+                        abstract: abstract,
+                        englishAbstract: abstract, // 简化处理
+                        uploadDate: new Date().toISOString().split('T')[0],
+                        downloads: 0,
+                        comments: 0,
+                        citations: 0,
+                        likes: 0,
+                        dislikes: 0
+                    };
+                    
+                    mockPapers.unshift(newPaper);
+                    renderPapers(mockPapers);
+                    
+                    // 更新统计数据
+                    animateStats();
+                }
+            });
+            
+            // 退出登录
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                currentUser = null;
+                
+                // 显示成功提示
+                showSuccessToast('toast-logout-success');
+                
+                // 更新用户菜单
+                updateUserMenu();
+            });
+            
+            // 导航链接点击事件
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有活动状态
+                    document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(l => {
+                        l.classList.remove('active', 'font-bold', 'border-b-2', 'border-secondary');
+                    });
+                    
+                    // 添加活动状态
+                    this.classList.add('active', 'font-bold');
+                    if (window.innerWidth >= 768) {
+                        this.classList.add('border-b-2', 'border-secondary');
+                    }
+                    
+                    // 关闭移动端菜单
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+            
+            // 初始化第一个导航链接为活动状态
+            document.querySelector('.nav-link').classList.add('active', 'font-bold', 'border-b-2', 'border-secondary');
+            document.querySelector('.mobile-nav-link').classList.add('active', 'font-bold');
+        }
+
+        // 更新用户菜单
+        function updateUserMenu() {
+            const userMenuBtn = document.getElementById('user-menu-btn');
+            
+            if (currentUser) {
+                // 已登录状态
+                userMenuBtn.innerHTML = `
+                    <span class="hidden md:inline mr-1">${currentUser.username}</span>
+                    <i data-lucide="user-circle-2" class="w-6 h-6"></i>
+                    <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                `;
+                
+                // 重新渲染图标
+                lucide.createIcons();
+            } else {
+                // 未登录状态
+                userMenuBtn.innerHTML = `
+                    <i data-lucide="user-circle-2" class="w-6 h-6"></i>
+                    <span class="hidden md:inline" data-lang="nav-account">账号</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                `;
+                
+                // 重新渲染图标
+                lucide.createIcons();
+            }
+        }
+
+        // 渲染论文列表
+        function renderPapers(papers) {
+            const container = document.getElementById('papers-container');
+            container.innerHTML = '';
+            
+            papers.slice(0, 6).forEach(paper => {
+                const paperCard = document.createElement('div');
+                paperCard.className = 'bg-white rounded-lg shadow-md overflow-hidden card-hover';
+                paperCard.setAttribute('data-id', paper.id);
+                
+                const title = currentLang === 'zh-CN' ? paper.title : paper.englishTitle;
+                const keywords = currentLang === 'zh-CN' ? paper.keywords : paper.englishKeywords;
+                const abstract = currentLang === 'zh-CN' ? paper.abstract : paper.englishAbstract;
+                
+                paperCard.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">${paper.categoryName[currentLang]}</span>
+                            <span class="text-gray-500 text-sm">${formatDate(paper.uploadDate)}</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 line-clamp-2">${title}</h3>
+                        <p class="text-gray-600 text-sm mb-3">${paper.authors.join(', ')}</p>
+                        <p class="text-gray-700 text-sm mb-4 line-clamp-3">${abstract}</p>
+                        <div class="flex flex-wrap gap-1 mb-4">
+                            ${keywords.slice(0, 3).map(keyword => `
+                                <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">${keyword}</span>
+                            `).join('')}
+                            ${keywords.length > 3 ? `<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">+${keywords.length - 3}</span>` : ''}
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                <span class="flex items-center">
+                                    <i data-lucide="download" class="w-4 h-4 mr-1"></i>
+                                    ${paper.downloads}
+                                </span>
+                                <span class="flex items-center">
+                                    <i data-lucide="message-circle" class="w-4 h-4 mr-1"></i>
+                                    ${paper.comments}
+                                </span>
+                                <span class="flex items-center">
+                                    <i data-lucide="link" class="w-4 h-4 mr-1"></i>
+                                    ${paper.citations}
+                                </span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="text-gray-500 hover:text-green-500 transition-all paper-like-btn" data-id="${paper.id}">
+                                    <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+                                    <span class="ml-1 text-xs">${paper.likes || 0}</span>
+                                </button>
+                                <button class="text-gray-500 hover:text-red-500 transition-all paper-dislike-btn" data-id="${paper.id}">
+                                    <i data-lucide="thumbs-down" class="w-4 h-4"></i>
+                                    <span class="ml-1 text-xs">${paper.dislikes || 0}</span>
+                                </button>
+                                <button class="text-primary hover:text-blue-700 transition-all paper-preview-btn">
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(paperCard);
+                
+                // 重新渲染图标
+                lucide.createIcons();
+                
+                // 绑定预览按钮点击事件
+                paperCard.querySelector('.paper-preview-btn').addEventListener('click', function() {
+                    showPaperPreview(paper);
+                });
+                
+                // 绑定点赞按钮点击事件
+                paperCard.querySelector('.paper-like-btn').addEventListener('click', function() {
+                    const paperId = parseInt(this.getAttribute('data-id'));
+                    const paper = mockPapers.find(p => p.id === paperId);
+                    
+                    if (paper) {
+                        paper.likes = (paper.likes || 0) + 1;
+                        
+                        // 更新显示
+                        const likeCount = this.querySelector('span');
+                        likeCount.textContent = paper.likes;
+                        
+                        // 显示成功提示
+                        const messageKey = currentLang === 'zh-CN' ? 'toast-like-success' : 'toast-like-success';
+                        showSuccessToast('toast-like-success');
+                    }
+                });
+                
+                // 绑定踩按钮点击事件
+                paperCard.querySelector('.paper-dislike-btn').addEventListener('click', function() {
+                    const paperId = parseInt(this.getAttribute('data-id'));
+                    const paper = mockPapers.find(p => p.id === paperId);
+                    
+                    if (paper) {
+                        paper.dislikes = (paper.dislikes || 0) + 1;
+                        
+                        // 更新显示
+                        const dislikeCount = this.querySelector('span');
+                        dislikeCount.textContent = paper.dislikes;
+                        
+                        // 显示成功提示
+                        const messageKey = currentLang === 'zh-CN' ? 'toast-dislike-success' : 'toast-dislike-success';
+                        showSuccessToast('toast-dislike-success');
+                    }
+                });
+            });
+        }
+
+        // 显示论文预览
+        function showPaperPreview(paper) {
+            const previewModal = document.getElementById('paper-preview-modal');
+            const previewTitle = document.getElementById('preview-title');
+            const previewAuthors = document.getElementById('preview-authors');
+            const previewCategory = document.getElementById('preview-category');
+            const previewKeywords = document.getElementById('preview-keywords');
+            const previewAbstract = document.getElementById('preview-abstract');
+            const previewDate = document.getElementById('preview-date');
+            const previewDownloads = document.getElementById('preview-downloads');
+            const previewComments = document.getElementById('preview-comments');
+            
+            const title = currentLang === 'zh-CN' ? paper.title : paper.englishTitle;
+            const keywords = currentLang === 'zh-CN' ? paper.keywords : paper.englishKeywords;
+            const abstract = currentLang === 'zh-CN' ? paper.abstract : paper.englishAbstract;
+            
+            previewTitle.textContent = title;
+            previewAuthors.textContent = paper.authors.join(', ');
+            previewCategory.textContent = paper.categoryName[currentLang];
+            previewAbstract.textContent = abstract;
+            previewDate.textContent = formatDate(paper.uploadDate);
+            previewDownloads.textContent = paper.downloads;
+            previewComments.textContent = paper.comments;
+            
+            // 渲染关键词
+            previewKeywords.innerHTML = '';
+            keywords.forEach(keyword => {
+                const keywordSpan = document.createElement('span');
+                keywordSpan.className = 'bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded ml-1';
+                keywordSpan.textContent = keyword;
+                previewKeywords.appendChild(keywordSpan);
+            });
+            
+            // 显示预览模态框
+            previewModal.classList.remove('hidden');
+            
+            // 绑定下载按钮点击事件
+            document.getElementById('preview-download-btn').onclick = function() {
+                // 模拟下载
+                paper.downloads++;
+                previewDownloads.textContent = paper.downloads;
+                
+                // 更新论文列表中的下载数
+                const paperCard = document.querySelector(`.paper-card[data-id="${paper.id}"]`);
+                if (paperCard) {
+                    const downloadIcon = paperCard.querySelector('[data-lucide="download"]');
+                    if (downloadIcon) {
+                        downloadIcon.nextSibling.textContent = ` ${paper.downloads}`;
+                    }
+                }
+                
+                // 更新统计数据
+                animateStats();
+            };
+            
+            // 绑定评论按钮点击事件
+            document.getElementById('preview-comment-btn').onclick = function() {
+                alert('评论功能正在开发中，敬请期待！');
+            };
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            
+            if (currentLang === 'zh-CN') {
+                return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+            } else {
+                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            }
+        }
+
+        // 显示成功提示
+        function showSuccessToast(messageKey) {
+            const toast = document.getElementById('success-toast');
+            const message = document.getElementById('success-message');
+            
+            message.textContent = translations[currentLang][messageKey];
+            
+            toast.classList.remove('translate-y-full', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-full', 'opacity-0');
+            }, 3000);
+        }
+
+        // 动画统计数据
+        function animateStats() {
+            const statsPapers = document.getElementById('stats-papers');
+            const statsAuthors = document.getElementById('stats-authors');
+            const statsDownloads = document.getElementById('stats-downloads');
+            const statsCitations = document.getElementById('stats-citations');
+            
+            // 计算统计数据
+            const papersCount = mockPapers.length;
+            const authorsCount = new Set(mockPapers.flatMap(paper => paper.authors)).size;
+            const downloadsCount = mockPapers.reduce((sum, paper) => sum + paper.downloads, 0);
+            const citationsCount = mockPapers.reduce((sum, paper) => sum + paper.citations, 0);
+            
+            // 动画效果
+            animateValue(statsPapers, 0, papersCount, 1000);
+            animateValue(statsAuthors, 0, authorsCount, 1000);
+            animateValue(statsDownloads, 0, downloadsCount, 1000);
+            animateValue(statsCitations, 0, citationsCount, 1000);
+        }
+
+        // 数值动画
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value;
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    </script>
+</body>
+</html>
